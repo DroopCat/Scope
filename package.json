@@ -1,0 +1,19 @@
+{
+  "name": "scope",
+  "version": "1.0.0",
+  "description": "Play lasertag in your browser with recoil hardware.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Zach Groening",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ws": "^7.3.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "lasertag"
+  ]
+}

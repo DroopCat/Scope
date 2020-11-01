@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Spectator View</title>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/p5.js"></script> -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div id="lobby" style="display:none;">
+      <h2>Waiting for players to join...</h2>
+        <div id="roster">
+          <h2 class="slidein">Droopcat</h2>
+        </div>
+    </div>
+    <div id="overlay">
+      <h1 id="live">Live</h1>
+      <div id="controls">
+        <h4>Rotation</h4>
+        <input type="range" min="1" max="360" value="50" class="slider" id="slider1">
+        <h4>Scale</h4>
+        <input type="range" min="1" max="100" value="50" class="slider" id="slider4">
+        <h4>X</h4>
+        <input type="range" min="1" max="100" value="50" class="slider" id="slider2">
+        <h4>Y</h4>
+        <input type="range" min="1" max="100" value="50" class="slider" id="slider3">
+      </div>
+    </div>
+    <canvas id="canvas"></canvas>
+    <script src="/assets/lib/qrcode.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>

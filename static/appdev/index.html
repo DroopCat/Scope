@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Bluetooth testing</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="setup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Splash -->
+    <div id="splash">
+        <img id="splashlogo" src="../assets/imgs/droopcatlogo.svg" alt="hoi">
+    </div>
+
+    <!-- Setup menus -->
+    <div id="ftsetup">
+      <div id="setupgun" class="setup">
+          <h1>Setup<br>your gun</h1>
+          <div id="power">
+            <img src="../assets/icons/gun_power_button.svg" alt="power button">
+            <h2>Press the power button<br>on the side of your gun</h2>
+          </div>
+
+        <div class="btncontainer">
+          <div class="nextbtn greenbtn unselectable" id="connectGunbtn">
+            <h3>Connect Gun</h3>
+          </div>
+        </div>
+      </div>
+      <div id="setupphone" class="setup">
+          <h1>Setup<br>your phone</h1>
+          <div id="blegps">
+            <div class="permbox" id="fullscreenPerm">
+              <h3 class="permboxtext unselectable">Go Fullscreen</h3>
+            </div>
+            <div class="permbox" id="wakeLockPerm">
+              <h3 class="permboxtext unselectable">Turn on wake lock</h3>
+            </div>
+            <div class="permbox" id="locationPerm">
+              <h3 class="permboxtext unselectable">Allow Location</h3>
+            </div>
+          </div>
+      </div>
+      <div id="setupusername" class="setup">
+          <h1>Pick a<br>Username</h1>
+          <form onsubmit="submitUsername();return false">
+            <input id="username" type="text" placeholder="username..." autocomplete="off">
+          </form>
+        <div class="btncontainer">
+          <div onclick="submitUsername()" class="nextbtn greenbtn unselectable" id="usernamebtn">
+            <h3>Go</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reconnection menus -->
+    <div class="reconnect">
+
+    </div>
+
+    <!-- Lobby -->
+    <div id="lobby">
+      <div id="lobbybar">
+        <img src="/assets/icons/settings.svg" alt="settings">
+        <h1>Player Lobby</h1>
+      </div>
+      <div id="roster">
+        <div class="player">
+          <h3>Nobody :'(</h3>
+        </div>
+      </div>
+      <div id="readyContainer">
+        <div id="readyBtn">
+          <h1>Ready</h1>
+        </div>
+      </div>
+    </div>
+    <!-- In game overlay stuff -->
+    <div id="countdown">
+      <h1 id="startCountdownNumber">5</h1>
+    </div>
+    <div id="death">
+      <h1>You Died.</h1>
+      <h3>Killed by</h3>
+      <h2 id="killedBy">Invisible Man</h2>
+      <h3>With</h3>
+      <h2 id="killedWith">Magic :O</h2>
+      <h4>Respawning in</h4>
+      <h5 id="respawnTimer">🕙</h5>
+    </div>
+    <div id="hit"></div>
+    <div id="dragoverlay" ondragover="allowDrop(event)">
+      <h1>Send item to nearby player</h1>
+    </div>
+    <!-- Main screen -->
+    <div id="mainScreen">
+      <!-- <h1 id="ir">IrPacket</h1>
+      <h1 id="btn">IrPacket</h1>
+      <h1 id="voltage">IrPacket</h1>
+      <h1 id="flags">IrPacket</h1>
+      <h1 id="irsense">IrPacket</h1>
+      <button id="magicButton" type="button">Send packet</button>
+      <h1 id="health">Maximum Health!</h1>
+      <progress value="25" max="100"></progress>
+      <div id="dragthing" class="draggable">
+        <h1>drag test</h1>
+      </div> -->
+      <div id="mainTopBar">
+        <img src="/assets/icons/settings.svg" alt="settings">
+        <div id="mainCountdown">
+          <h2 id="gameTimerElement">7:35</h2>
+          <h4>REMAINING</h4>
+        </div>
+      </div>
+      <div id="mainStatsBar">
+        <h2 id="kills">3</h2>
+        <h2 id="leaderboard">2nd</h2>
+        <h2 id="deaths">1</h2>
+      </div>
+      <div id="middlePanel">
+        <div id="mapContainer">
+          <canvas id="mainCanvas">
+          </canvas>
+        </div>
+      </div>
+      <div>
+
+      </div>
+      <div id="mainBottomBar">
+        <div id="mainBottomBarLeft">
+          <div id="ammoBox">
+            <img src="/assets/icons/ammo.svg" alt="ammo">
+            <h3 id=ammoDisplayElement>54/144</h3>
+          </div>
+        </div>
+        <div id="mainBottomBarMiddle">
+            <progress id="healthBar" value="25" max="100"></progress>
+        </div>
+        <div id="mainBottomBarRight">
+          <img src="/assets/icons/backpack.svg" alt="backpack">
+        </div>
+      </div>
+    </div>
+    <!-- Scripts -->
+    <script src="map.js"></script>
+    <script src="index.js"></script>
+    <script src="audio.js"></script>
+    <script src="/assets/lib/recoilweapon.js"></script>
+    <script src="networking.js"></script>
+    <script src="utils.js"></script>
+    <script src="setup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 103 102" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-6816,-4798)">
+        <g id="Compass" transform="matrix(1,0,0,1,1179.23,1051.55)">
+            <rect x="5637.55" y="3746.72" width="101.603" height="101.603" style="fill:none;"/>
+            <clipPath id="_clip1">
+                <rect x="5637.55" y="3746.72" width="101.603" height="101.603"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <g transform="matrix(0.623163,0,0,0.623163,2123.03,3012.06)">
+                    <circle cx="5722.21" cy="1261.59" r="81.522"/>
+                </g>
+                <g transform="matrix(0.623163,0,0,0.623163,2122.24,3012.06)">
+                    <path d="M5723.48,1203.92L5742.53,1261.59L5704.43,1261.59L5723.48,1203.92Z" style="fill:rgb(255,64,64);"/>
+                </g>
+                <g transform="matrix(-0.623163,-1.11022e-16,1.11022e-16,-0.623163,9255.57,4584.41)">
+                    <path d="M5723.48,1203.92L5742.53,1261.59L5704.43,1261.59L5723.48,1203.92Z" style="fill:white;"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="168.42032"
+   height="108.70399"
+   viewBox="0 0 168.42032 108.70399"
+   version="1.1"
+   xml:space="preserve"
+   style="clip-rule:evenodd;fill-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2"
+   id="svg24"
+   sodipodi:docname="Magnum.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"><metadata
+   id="metadata30"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs28">
+        
+    
+            
+            <clipPath
+   id="_clip1">
+                <rect
+   x="3695.6899"
+   y="2915.4299"
+   width="830.67999"
+   height="209.76801"
+   id="rect4" />
+            </clipPath>
+            
+        
+                
+                
+                
+            </defs><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="640"
+   inkscape:window-height="480"
+   id="namedview26"
+   showgrid="false"
+   inkscape:zoom="0.33293269"
+   inkscape:cx="103.96239"
+   inkscape:cy="54.648657"
+   inkscape:window-x="26"
+   inkscape:window-y="416"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="svg24" />
+    <rect
+   x="-284.22516"
+   y="-77.987228"
+   width="830.67999"
+   height="209.76801"
+   style="fill:none"
+   id="rect2" /><g
+   id="g13"
+   transform="matrix(0.395585,0,0,0.395585,-2407.1901,289.50532)">
+                    <path
+   inkscape:connector-curvature="0"
+   id="path11"
+   style="fill:#ffffff"
+   d="m 6445.28,-711.583 h 53.84 l -5.13,14.928 h 16.9 l -23.44,68.251 h -1.12 c -9.44,-10e-4 -17.84,5.995 -20.9,14.924 0,0.002 0,0.003 0,0.003 h -189.65 c 0,0 -7.64,22.149 -13.62,39.476 -4.18,12.132 -15.6,20.273 -28.43,20.273 -5.25,0 -9.39,0 -9.39,0 l -33.2,96.68 h -79.95 l -26.05,-36.486 20.97,-61.068 c 0,0 7.17,-20.882 13.7,-39.892 6.57,-19.116 3.49,-40.225 -8.25,-56.675 0,-10e-4 0,-0.002 0,-0.002 l 20.75,-60.412 h 66.25 l 6.96,-20.258 h 225.3 z m -219.42,98.106 -14.84,43.216 h 22.52 c 6.09,0 11.51,-3.884 13.45,-9.654 4.31,-12.737 11.34,-33.562 11.34,-33.562 z" />
+                </g>
+</svg>

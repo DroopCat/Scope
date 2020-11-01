@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 124 124" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-6805,-4648)">
+        <g id="Missile_icon" transform="matrix(1,0,0,1,1179.54,1109.39)">
+            <rect x="5626.24" y="3539.16" width="123.122" height="123.122" style="fill:none;"/>
+            <clipPath id="_clip1">
+                <rect x="5626.24" y="3539.16" width="123.122" height="123.122"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <g transform="matrix(1,0,0,1,-48.9867,1775.01)">
+                    <path d="M5717.98,1822.24L5755.09,1785.12C5765.45,1790.35 5772.9,1798.01 5777.81,1807.8L5740.67,1844.93L5741.13,1846.44C5742.78,1851.88 5741.3,1857.8 5737.28,1861.82C5727.87,1871.23 5711.66,1887.44 5711.66,1887.44C5711.66,1887.44 5710.02,1882.06 5708.36,1876.6C5706.53,1870.55 5707.7,1864.04 5711.39,1859.05L5703.86,1851.52C5698.87,1855.21 5692.37,1856.38 5686.31,1854.55C5680.85,1852.89 5675.47,1851.26 5675.47,1851.26C5675.47,1851.26 5691.69,1835.04 5701.09,1825.63C5705.11,1821.61 5711.03,1820.13 5716.48,1821.78L5717.98,1822.24ZM5768.23,1771.99C5776.65,1763.57 5788.57,1761.81 5794.84,1768.08C5801.07,1774.32 5799.36,1786.17 5791.02,1794.59L5790.92,1794.69L5785.38,1800.23C5780.5,1790.16 5772.95,1782.58 5762.65,1777.56L5768.23,1771.99Z" style="fill:white;"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

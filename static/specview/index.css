@@ -1,0 +1,73 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Rubik', sans-serif;
+  width: 100%;
+  height: 100%;
+}
+canvas {
+  display: block;
+  z-index: -1;
+  position: relative;
+}
+#live {
+  font-size: 3em;
+  color: #e60000;
+  margin: 20px;
+  display: inline-block;
+}
+#controls {
+  margin: 20px;
+  float: right;
+}
+#controls h4 {
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
+#overlay {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+#lobby {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-color: #373737;
+}
+#lobby > h2 {
+  text-align: center;
+  color: white;
+  font-size: 40px;
+  /* text-shadow: 0px 0px 6px #000000; */
+}
+#roster {
+  width: 30%;
+  height: 60%;
+  background-color: #000000;
+  border-radius: 20px;
+  margin: auto;
+  margin-top: 10%;
+  overflow: hidden;
+}
+#roster h2 {
+  color: white;
+  text-align: center;
+  margin: 10px;
+  font-style: oblique;
+}
+.slidein {
+  animation: slidein 0.5s 1 0s ease;
+}
+@keyframes slidein{
+    0%{
+        transform: translateX(-100px);
+        opacity: 0;
+        }
+    100%{
+        transform: rotate(xx) translateX(0px);
+        opacity: 1;
+        }
+}

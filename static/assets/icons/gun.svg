@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 86 53" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-6036,-4793)">
+        <g id="Gun_icon" transform="matrix(1,0,0,1,1178.92,1109.56)">
+            <rect x="4857.86" y="3684" width="84.689" height="52.377" style="fill:none;"/>
+            <clipPath id="_clip1">
+                <rect x="4857.86" y="3684" width="84.689" height="52.377"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <g transform="matrix(0.205775,0,0,0.205775,3606.56,3830.43)">
+                    <path d="M6132.31,-711.583L6499.12,-711.583L6465.43,-613.477L6275.78,-613.477C6275.78,-613.477 6270.46,-598.05 6265.23,-582.874C6259.21,-565.432 6242.79,-553.728 6224.34,-553.728C6224.34,-553.728 6224.34,-553.728 6224.34,-553.728L6191.14,-457.048L6111.19,-457.048L6085.14,-493.534C6085.14,-493.534 6106.48,-555.674 6119.81,-594.496C6126.38,-613.61 6123.3,-634.719 6111.56,-651.168C6111.56,-651.17 6111.56,-651.171 6111.56,-651.171L6132.31,-711.583Z" style="fill:white;"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
