@@ -69,6 +69,7 @@ var socketCounter = 0;
 game.id = makeUID(6);
 console.log("Game id:", game.id);
 
+app.use("/", express.static("static/appdev"));
 app.use(express.static("static"));
 
 const httpsServer = https.createServer(
