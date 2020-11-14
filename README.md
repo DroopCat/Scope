@@ -7,6 +7,6 @@ Most chromium based browsers are compatable
 ```
 $ cd Scope
 $ npm install
-$ node index.js
+$ node server.js
 ```
 
