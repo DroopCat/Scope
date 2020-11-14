@@ -1,0 +1,9 @@
+{
+  "startOnReady": true,
+  "preStartCooldown": 5000,
+  "gameTimeMins": 7,
+  "defaultWeapon":"RK-45",
+  "startAmmo":"full",
+  "telemetry":false,
+  "dropAmmoOnReload":false
+}

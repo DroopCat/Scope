@@ -1,0 +1,19 @@
+{
+    "name":"RK-45",
+    "description":"Default Recoil Weapon",
+    "slotID":6,
+    "damage":8,
+    "maxLoadedAmmo":10,
+    "maxClips":9,
+    "behavior":{
+      "triggerMode": "0xFE",
+      "rateOfFire": 2,
+      "muzzleFlashMode": "0x1",
+      "flashParam1": 4,
+      "flashParam2": 3,
+      "narrowIrPower": 80,
+      "wideIrPower": 0,
+      "muzzleLedPower": 255,
+      "motorPower": 18
+    }
+  }

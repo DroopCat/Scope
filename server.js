@@ -2,60 +2,40 @@ const WebSocket = require("ws");
 const express = require("express");
 const fs = require("fs");
 var https = require("https");
+const stripJsonComments = require("strip-json-comments");
 const { Console } = require("console");
 const app = express();
 const port = 80;
 
-var gameSettings = {
-  startOnReady: true,
-  preStartCooldown: 5000,
-  gameTimeMins: 7,
-  defaultWeapon:"RK-45",
-  startAmmo:"full",
-  telemetry:false,
-  dropAmmoOnReload:false,
-};
+var gameSettings;
+var weaponDefinitions = [];
 
-var weaponDefinitions = [
-  {
-    name:"Pistol",
-    description:"Single Shot Goodness",
-    slotID:5,
-    damage:10,
-    maxLoadedAmmo:30,
-    maxClips:5,
-    behavior:{
-      triggerMode: 0x01,
-      rateOfFire: 20,
-      muzzleFlashMode: 0x1,
-      flashParam1: 1,
-      flashParam2: 3,
-      narrowIrPower: 125,
-      wideIrPower: 30,
-      muzzleLedPower: 255,
-      motorPower: 18,
-    },
-  },
-  {
-    name:"RK-45",
-    description:"Default Recoil Weapon",
-    slotID:6,
-    damage:8,
-    maxLoadedAmmo:10,
-    maxClips:9,
-    behavior:{
-      triggerMode: 0xFE,
-      rateOfFire: 5,
-      muzzleFlashMode: 0x1,
-      flashParam1: 4,
-      flashParam2: 3,
-      narrowIrPower: 80,
-      wideIrPower: 0,
-      muzzleLedPower: 255,
-      motorPower: 18,
-    },
-  }
-];
+loadConf();
+function loadConf() {
+  // load game config
+  fs.readFile('config/game/default.json', function (err, data) {
+    if (err) {
+      throw err; 
+    }
+    gameSettings = JSON.parse(stripJsonComments(data.toString()));
+  });
+
+  // Read weapon configs
+  fs.readdir('config/weapon', function (err, files) {
+    if (err) {
+      return console.log('Unable to read weapon config directory: ' + err);
+    }
+    files.forEach((file)=>{
+      console.log("Found weapon", file);
+      fs.readFile('config/weapon/' + file, function (err, data) {
+        if (err) {
+          throw err; 
+        }
+        weaponDefinitions.push(JSON.parse(stripJsonComments(data.toString())));
+      });
+    });
+  });
+}
 
 var game = {
   state: "waiting",

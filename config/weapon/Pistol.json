@@ -1,0 +1,19 @@
+{
+    "name":"Pistol",
+    "description":"Single Shot Goodness",
+    "slotID":5,
+    "damage":10,
+    "maxLoadedAmmo":10,
+    "maxClips":9,
+    "behavior":{
+      "triggerMode": "0x01",
+      "rateOfFire": 1,
+      "muzzleFlashMode": "0x1",
+      "flashParam1": 1,
+      "flashParam2": 3,
+      "narrowIrPower": 125,
+      "wideIrPower": 30,
+      "muzzleLedPower": 255,
+      "motorPower": 18
+    }
+  }
