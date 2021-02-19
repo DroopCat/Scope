@@ -9,6 +9,7 @@
   "author": "Zach Groening",
   "license": "MIT",
   "dependencies": {
+    "colors": "^1.4.0",
     "express": "^4.17.1",
     "strip-json-comments": "^3.1.1",
     "ws": "^7.3.0"

@@ -4,8 +4,11 @@ const fs = require("fs");
 var https = require("https");
 const stripJsonComments = require("strip-json-comments");
 const { Console } = require("console");
+var colors = require('colors');
 const app = express();
 const port = 80;
+
+console.clear();
 
 var gameSettings;
 var weaponDefinitions = [];
@@ -23,10 +26,10 @@ function loadConf() {
   // Read weapon configs
   fs.readdir('config/weapon', function (err, files) {
     if (err) {
-      return console.log('Unable to read weapon config directory: ' + err);
+      return console.log(('Unable to read weapon config directory: ' + err).red);
     }
     files.forEach((file)=>{
-      console.log("Found weapon", file);
+      console.log(colors.yellow("Found weapon config", file));
       fs.readFile('config/weapon/' + file, function (err, data) {
         if (err) {
           throw err; 
@@ -47,7 +50,7 @@ var users = [];
 var players = [];
 var socketCounter = 0;
 game.id = makeUID(6);
-console.log("Game id:", game.id);
+console.log(("Game id: " + game.id).green);
 
 app.use("/", express.static("static/appdev"));
 app.use(express.static("static"));
@@ -63,7 +66,7 @@ const httpsServer = https.createServer(
 const wss = new WebSocket.Server({ server: httpsServer });
 
 httpsServer.listen(3000, () => {
-  console.log("Listening at https://localhost/");
+  console.log("Listening at https://localhost/".yellow);
 });
 
 wss.on("connection", (ws) => {
