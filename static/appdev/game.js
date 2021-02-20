@@ -10,7 +10,7 @@ var gameSettings = {};
 // Player
 var playerSettings = {
   vibrateOnHit:true,
-  recoil:false,
+  recoil:true,
 };
 var playerGameData = {};
 var playerHealth = 100;
@@ -42,6 +42,7 @@ document.getElementById("connectGunbtn").addEventListener("click", ()=>{
     RecoilGun.on("reloadBtn", reload);
     RecoilGun.switchWeapon(2);
     RecoilGun.startTelemetry();
+    RecoilGun.updateSettings();
   }).catch((error)=>{
     console.log("Failure to connect", error);
     bleFailure();
@@ -112,6 +113,7 @@ function readyGun() {
   currentWeapon = findWeapon(gameSettings.defaultWeapon);
   RecoilGun.gunSettings.shotId = playerGameData.gunID;
   RecoilGun.gunSettings.recoil = playerSettings.recoil;
+  RecoilGun.updateSettings();
   weaponDefinitions.forEach((weapon, i) => {
     RecoilGun.setWeaponProfile(weapon.behavior, weapon.slotID);
   });
@@ -195,8 +197,8 @@ function reload() {
         availableRoundsLeft = 0;
       }
       RecoilGun.loadClip(loadedAmmo);
-      updateAmmo();
       reloading = false;
+      updateAmmo();
     }, 1000);
   }
 }
@@ -205,13 +207,17 @@ function updateAmmo() {
   if (reloading) {
     document.getElementById("ammoDisplayElement").innerHTML = "--/--";
   }else{
-    document.getElementById("ammoDisplayElement").innerHTML = (loadedAmmo.toString() + "/" + availableRoundsLeft.toString());
+    document.getElementById("ammoDisplayElement").innerHTML = loadedAmmo + "/" + availableRoundsLeft;
   }
 }
 function ammoChanged(ammo) {
-  playSound(1);
-  loadedAmmo = ammo;
-  updateAmmo();
+  if (ammo !== null) {
+    if (ammo < loadedAmmo) {
+      playSound(1);
+    }
+    loadedAmmo = ammo;
+    updateAmmo();
+  }
 }
 
 function updateStats() {

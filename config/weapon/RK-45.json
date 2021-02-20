@@ -7,8 +7,8 @@
     "maxClips":9,
     "behavior":{
       "triggerMode": "0xFE",    // Full auto: 0xFE, Plasma: 0x00, Burst of up to N shots: 0x01-0xFD
-      "rateOfFire": 2,          // Rate of fire for burst or plasma mode, in units of 50ms
-      "muzzleFlashMode": "0x1", // 0x0 = none, 0x1 = square wave, 0x2 = glow, 0x03 = On
+      "rateOfFire": 3,          // Rate of fire for burst or plasma mode, in units of 50ms
+      "muzzleFlashMode": "0x02", // 0x0 = none, 0x1 = square wave, 0x2 = glow, 0x03 = On
       "flashParam1": 4,         // Number of flashes - Only for square wave and glow modes
       "flashParam2": 3,         // Flash length - in 100ms steps for square wave - in 500ms steps for glow
       "narrowIrPower": 80,      // Main laser power 0-255
