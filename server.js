@@ -4,7 +4,7 @@ const fs = require("fs");
 var https = require("https");
 const stripJsonComments = require("strip-json-comments");
 const { Console } = require("console");
-var colors = require('colors');
+var colors = require('@colors/colors');
 const app = express();
 const port = 80;
 
