@@ -3,17 +3,13 @@ const express = require("express");
 const fs = require("fs");
 var https = require("https");
 const stripJsonComments = require("strip-json-comments");
-const { Console } = require("console");
 var colors = require('@colors/colors');
 const app = express();
 const port = 80;
 
-console.clear();
-
 var gameSettings;
 var weaponDefinitions = [];
 
-loadConf();
 function loadConf() {
   // load game config
   fs.readFile('config/game/default.json', function (err, data) {
@@ -50,6 +46,7 @@ var users = [];
 var players = [];
 var socketCounter = 0;
 game.id = makeUID(6);
+loadConf();
 console.log(("Game id: " + game.id).green);
 
 app.use("/", express.static("static/appdev"));
@@ -66,7 +63,7 @@ const httpsServer = https.createServer(
 const wss = new WebSocket.Server({ server: httpsServer });
 
 httpsServer.listen(3000, () => {
-  console.log("Listening at https://localhost/".yellow);
+  console.log("Listening at https://localhost:3000/".yellow);
 });
 
 wss.on("connection", (ws) => {
