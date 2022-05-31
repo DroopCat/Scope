@@ -167,7 +167,7 @@ function timer() {
   secondsLeft = secondsLeft - 1;
   let mins = Math.floor(secondsLeft / 60);
   let seconds = secondsLeft % 60;
-  let clock = mins.toString() + ":" + seconds.toString();
+  let clock = mins.toString() + ":" + seconds.toString().padStart(2, '0');
   document.getElementById("gameTimerElement").innerHTML = clock;
   if (secondsLeft <= 0) {
     endGame();
