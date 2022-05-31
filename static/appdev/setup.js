@@ -48,7 +48,7 @@ function allowGPS() {
     console.log(navigator.geolocation.getCurrentPosition(geoSuccess, (error)=>{
       switch(error.code) {
         case error.PERMISSION_DENIED:
-          alert("Looks like location is denied. You will most likely have to enable it in your browsers settings.");
+          alert("Looks like location is denied. To enable it, tap the triangle or padlock to the left of the address bar, tap permissions, and allow location.");
           break;
         case error.POSITION_UNAVAILABLE:
           alert("Looks like geolocation is available but also unavailable? (What?!?)");
@@ -97,7 +97,7 @@ function showPhoneSetupMenu() {
     wakeLockPermBtn.style.display = "none";
   }
   if (phoneInfo.locationEnabled) {
-    locationPermBtn.style.display = "none";
+    locationPermBtn.classList.add("permAllowed");
   } else {
     locationPermBtn.style.display = "grid";
   }

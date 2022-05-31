@@ -65,6 +65,10 @@ function checkPhoneInfo() {
     } else {
       phoneInfo.bluetoothAvailable = false;
     }
-
+    result.onchange = (event) => {
+      if (event.target.state == "granted") {
+        geoSuccess(1);
+      }
+    }
   });
 }
