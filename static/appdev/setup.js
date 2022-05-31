@@ -10,6 +10,9 @@ let locationPermBtn = document.getElementById("locationPerm");
 
 window.onload = function() {
   checkPhoneInfo();
+  if (!("bluetooth" in navigator)) {
+    document.getElementById("incompatable").style.display = "grid";
+  }
   storedUsername = localStorage.getItem("username");
   if (storedUsername != undefined) {
     document.getElementById("username").value = storedUsername;
