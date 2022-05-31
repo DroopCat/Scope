@@ -1,6 +1,8 @@
 // Game
 var lobbyRoster = document.getElementById("roster");
 var readyBtn = document.getElementById("readyBtn");
+var leaderBoard = document.getElementById("leaderboard");
+var continueBtn = document.getElementById("continueButton");
 var startCountdown = null;
 var respawnCountdown = null;
 var gameTimer = null;
@@ -27,27 +29,6 @@ var loadedAmmo = 50;
 var availableRoundsLeft = 20;
 var weaponDefinitions = [
 ];
-
-
-
-readyBtn.addEventListener("click", ready);
-document.getElementById("connectGunbtn").addEventListener("click", ()=>{
-  console.log("Connecting to gun.");
-  RecoilGun.connect().then(() => {
-    bleSuccess();
-    RecoilGun.gunSettings.shotId = 2;
-    RecoilGun.gunSettings.recoil = false;
-    RecoilGun.on("irEvent", irEvent);
-    RecoilGun.on("ammoChanged", ammoChanged);
-    RecoilGun.on("reloadBtn", reload);
-    RecoilGun.switchWeapon(2);
-    RecoilGun.startTelemetry();
-    RecoilGun.updateSettings();
-  }).catch((error)=>{
-    console.log("Failure to connect", error);
-    bleFailure();
-  });
-});
 
 //Lobby stuff
 function lobbyUpdated(players) {
@@ -107,6 +88,28 @@ function startGame () {
 function endGame() {
   console.log("Game Ended");
   stopMap();
+  showLeaderboard();
+}
+
+function showLeaderboard() {
+  let fade = [
+    {opacity:"0"},
+    {opacity:"1"},
+  ];
+  leaderBoard.style.display = "grid";
+  leaderBoard.animate(fade, 500);
+}
+
+function backToLobby() {
+  readyBtn.classList.remove("readyBtnPressed");
+  document.getElementById("lobby").style.display = "grid";
+  let fade = [
+    {opacity:"1"},
+    {opacity:"0"},
+  ];
+  leaderBoard.animate(fade, 500).finished.then(()=>{
+    leaderBoard.style.display = "none";
+  });
 }
 
 function readyGun() {
@@ -222,7 +225,7 @@ function ammoChanged(ammo) {
 
 function updateStats() {
   document.getElementById("kills").innerHTML = kills.toString();
-  document.getElementById("leaderboard").innerHTML = "1st";
+  document.getElementById("ingameleaderboard").innerHTML = "1st";
   document.getElementById("deaths").innerHTML = deathList.length.toString();
 }
 
@@ -313,3 +316,23 @@ function respawn() {
   document.getElementById("death").style.display = "none";
   RecoilGun.loadClip(loadedAmmo);
 }
+
+continueBtn.addEventListener("click", backToLobby);
+readyBtn.addEventListener("click", ready);
+document.getElementById("connectGunbtn").addEventListener("click", ()=>{
+  console.log("Connecting to gun.");
+  RecoilGun.connect().then(() => {
+    bleSuccess();
+    RecoilGun.gunSettings.shotId = 2;
+    RecoilGun.gunSettings.recoil = false;
+    RecoilGun.on("irEvent", irEvent);
+    RecoilGun.on("ammoChanged", ammoChanged);
+    RecoilGun.on("reloadBtn", reload);
+    RecoilGun.switchWeapon(2);
+    RecoilGun.startTelemetry();
+    RecoilGun.updateSettings();
+  }).catch((error)=>{
+    console.log("Failure to connect", error);
+    bleFailure();
+  });
+});
