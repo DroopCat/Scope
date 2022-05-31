@@ -336,3 +336,8 @@ document.getElementById("connectGunbtn").addEventListener("click", ()=>{
     bleFailure();
   });
 });
+
+window.onbeforeunload = (evt) => {
+  evt.preventDefault();
+  return evt.returnValue = '';
+}
