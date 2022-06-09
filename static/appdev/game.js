@@ -78,7 +78,7 @@ function preGameStart(cooldown) {
 function startGame () {
   startGun();
   console.log("Game Started");
-  secondsLeft = gameSettings.gameTimeMins * 60;
+  secondsLeft = gameSettings.timeMins * 60;
   timer();
   gameTimer = setInterval(timer, 1000);
   syncIndicators();

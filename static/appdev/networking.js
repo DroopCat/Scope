@@ -4,7 +4,7 @@ socket.onmessage = function(event) {
   console.log("WebSocket message received:", event.data);
   let message = JSON.parse(event.data);
   switch (message.msgType) {
-    case 'lobbyListUpdated':
+    case 'lobbyUpdate':
       lobbyUpdated(message.players);
       break;
     case 'updateGameState':
@@ -26,7 +26,7 @@ socket.onmessage = function(event) {
   }
 };
 
-let initMsg = { "msgType":"init", "client":"player" }
+let initMsg = { "msgType":"join" }
 socket.onopen = () => {
   socket.send(JSON.stringify(initMsg));
 };

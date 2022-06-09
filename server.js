@@ -1,155 +1,159 @@
 const WebSocket = require("ws");
 const express = require("express");
+const fsp = require("fs").promises;
 const fs = require("fs");
 var https = require("https");
+var http = require("http");
 const stripJsonComments = require("strip-json-comments");
 var colors = require('@colors/colors');
+
 const app = express();
-const port = 80;
-
-var gameSettings;
+const serverPort = 3000;
+const useHTTPS = true; // This setting exists for reverse proxy use
+var defaultSettings;
 var weaponDefinitions = [];
+var socketCounter = 0;
 
-function loadConf() {
+async function loadConf() {
   // load game config
-  fs.readFile('config/game/default.json', function (err, data) {
-    if (err) {
-      throw err; 
-    }
-    gameSettings = JSON.parse(stripJsonComments(data.toString()));
+  let defaultSettingsData = await fsp.readFile('config/game/default.json').catch(err=>{
+    console.error(err);
+    return;
   });
+  defaultSettings = JSON.parse(stripJsonComments(defaultSettingsData.toString()));
 
   // Read weapon configs
-  fs.readdir('config/weapon', function (err, files) {
-    if (err) {
-      return console.log(('Unable to read weapon config directory: ' + err).red);
-    }
-    files.forEach((file)=>{
-      console.log(colors.yellow("Found weapon config", file));
-      fs.readFile('config/weapon/' + file, function (err, data) {
-        if (err) {
-          throw err; 
-        }
-        weaponDefinitions.push(JSON.parse(stripJsonComments(data.toString())));
-      });
-    });
+  let files = await fsp.readdir('config/weapon').catch(err=>{
+    console.error('Unable to read weapon config directory: ' + err);
+    return;
+  });
+  files.forEach(async file=>{
+    console.log(colors.yellow("Found weapon config", file));
+    let data = await fsp.readFile('config/weapon/' + file).catch(err=>{console.log("Failed to read file", err);});
+    weaponDefinitions.push(JSON.parse(stripJsonComments(data.toString())));
   });
 }
 
 var game = {
   state: "waiting",
+  players: [],
+  timer: null,
+  gameEnd: null,
+  settings: null,
+  // settings: {
+  //   startOnReady: true,
+  //   timeMins: 1,
+  //   preStartCooldown: 5000,
+  //   defaultWeapon: "RK-45",
+  //   startAmmo: "full",
+  //   telemetry: false,
+  //   dropAmmoOnReload: false,
+  // },
 };
 
-var mainTimer = null;
-var gameEndTime = null;
-var users = [];
-var players = [];
-var socketCounter = 0;
+loadConf().then(()=>{
+  game.settings = defaultSettings;
+});
 game.id = makeUID(6);
-loadConf();
 console.log(("Game id: " + game.id).green);
 
 app.use("/", express.static("static/appdev"));
 app.use(express.static("static"));
-
-const httpsServer = https.createServer(
-  {
-    key: fs.readFileSync("certs/server.key"),
-    cert: fs.readFileSync("certs/server.cert"),
-  },
-  app
-);
-
-const wss = new WebSocket.Server({ server: httpsServer });
-
-httpsServer.listen(3000, () => {
+var httpServer;
+if (useHTTPS) {
+  httpServer = https.createServer(
+    {
+      key: fs.readFileSync("certs/server.key"),
+      cert: fs.readFileSync("certs/server.cert"),
+    },
+    app
+  );
+} else {
+  httpServer = http.createServer(app);
+}
+const wss = new WebSocket.Server({ server: httpServer });
+httpServer.listen(serverPort, () => {
   console.log("Listening at https://localhost:3000/".yellow);
 });
 
 wss.on("connection", (ws) => {
-  socketCounter = socketCounter + 1; // Increment socket counter
-  ws.id = socketCounter; // Label this socket
+  ws.id = socketCounter+=1; // Label this socket
   console.log("Websocket Connection | WSID:", ws.id);
-  // Add user to the player list
-  let user = {};
-  user.socketID = socketCounter;
-  users.push(user);
-  if (game.state != "waiting") {
-    sendToSID(ws.id, JSON.stringify({ msgType: "gameAlreadyStarted" }));
-  }
 
-  ws.on("message", (message) => {
+  ws.on("message", message => {
     let command = JSON.parse(message);
-
-    if (command.msgType == "init") {
-      let index = getUIfromWSID(ws.id);
-      users[index].clientType = command.client;
-    } else if (command.msgType == "setUsername") {
-      let index = getUIfromWSID(ws.id);
-      users[index].username = command.username;
-    } else {
-      handleGameMessage(ws, command);
+    console.log(command);
+    switch (command.msgType) {
+      case "join":
+        if (game.state != "waiting") {
+          console.log("Join rejected: Game already in progress");
+          sendToSID(ws.id, JSON.stringify({ msgType: "gameAlreadyStarted" }));
+          break;
+        }
+        if (ws.game) {
+          console.log("Player has already joined game");
+          break;
+        }
+        // Add user to the player list
+        let player = {};
+        player.username = undefined;
+        player.ws = ws;
+        player.uuid = makeUID(10);
+        game.players.push(player);
+        ws.game = game;
+        ws.player = player;
+        break;
+      case "reconnect":
+        if (ws.game) {
+          console.log("Player is already connected");
+          break;
+        }
+        let playerdata = game.players.find(player => {
+          return player.uuid == command.uuid;
+        });
+        if (!playerdata) {
+          console.log("Could not find player uuid to reconnect");
+          break;
+        }
+        playerdata.ws = ws;
+        ws.game = game;
+        break;
+      case "setUsername":
+        ws.player.username = command.username;
+        lobbyUpdate(ws.game.players);
+        break;
+      default:
+        if (ws.game) {
+          handleGameMessage(ws, command);
+        }
+        break;
     }
-    console.log(users);
   });
   ws.on("close", () => {
-    let index = getUIfromWSID(ws.id);
-    users.splice(index, 1);
-    console.log("User Disconnected");
-    updateLobbyList();
+    let missingPlayerIndex = ws.game.players.findIndex(player => {return player.ws.id == ws.id});
+    if (missingPlayerIndex == -1) {
+      console.log("could not find player to remove");
+      return;
+    }
+    console.log(`${ws.game.players[missingPlayerIndex].username || "Player"} Disconnected`);
+    if (ws.game.state == "waiting") {
+      ws.game.players.splice(missingPlayerIndex, 1);
+      lobbyUpdate(ws.game.players);
+    }
   });
 });
 
-function sendToSID(id, message) {
-  let client = wss.clients.forEach((client) => {
-    if (client.id == id) {
-      client.send(message);
-    }
+function assignPlayersGunIDs(players) {
+  let counter = 0;
+  players.forEach(player => {
+    player.gunID = counter++;
+    player.ws.send(JSON.stringify({ msgType: "assignGunID", GunID: counter }));
   });
 }
 
-function getGroupFromUsers(group) {
-  let sortedUserList = [];
-  users.forEach((user) => {
-    if (user.clientType == group) {
-      sortedUserList.push(Object.assign({}, user));
-    }
-  });
-  return sortedUserList;
-}
-
-function broadcast(message) {
-  wss.clients.forEach((client) => {
-    client.send(message);
-  });
-}
-
-function getUIfromWSID(wsid) {
-  let index = users.findIndex((user) => {
-    return user.socketID == wsid;
-  });
-  return index;
-}
-
-function assignPlayersGunIDs() {
-  let counter = 1;
-  users.forEach((user) => {
-    if (user.clientType == "player" && (user.state != undefined) ) {
-      if(user.state == "ready") {
-        user.gunID = counter;
-        sendToSID(
-          user.socketID,
-          JSON.stringify({ msgType: "assignGunID", GunID: counter })
-        );
-        counter = counter + 1;
-      }
-    }
-  });
-}
-
-function allPlayersReady() {
+function allPlayersReady(players) {
   let ready = true;
-  getGroupFromUsers("player").forEach((player) => {
+  players.forEach((player) => {
     if (player.state != undefined) {
       if (player.state != "ready") {
         ready = false;
@@ -159,73 +163,79 @@ function allPlayersReady() {
   return ready;
 }
 
-function startGame() {
+function startGame(game) {
   if (game.state == "waiting") {
-    console.log("Starting Game...");
+    console.log(`Starting Game (${game.id})`);
     game.state = "starting";
-    assignPlayersGunIDs();
-    broadcast(
-      JSON.stringify({ "msgType": "updateGameSettings", "settings": gameSettings })
-    );
-    broadcast(
-      JSON.stringify({ "msgType": "updateWeaponDefinitions", "weapons": weaponDefinitions })
-    );
-    updatePlayerList();
-    broadcast(
-      JSON.stringify({
+    assignPlayersGunIDs(game.players);
+    playerListUpdate(game);
+    game.players.forEach(player => {
+      player.ws.send(JSON.stringify({ "msgType": "updateGameSettings", "settings": game.settings }));
+      player.ws.send(JSON.stringify({ "msgType": "updateWeaponDefinitions", "weapons": weaponDefinitions }));
+      player.ws.send(JSON.stringify({
         msgType: "updateGameState",
         state: "starting",
-        cooldown: gameSettings.preStartCooldown,
-      })
-    );
+        cooldown: game.settings.preStartCooldown,
+      }));
+    });
+    
     setTimeout(() => {
       game.state = "started";
-      broadcast(
-        JSON.stringify({ msgType: "updateGameState", state: "started" })
-      );
+      game.players.forEach(player => {
+        player.ws.send(JSON.stringify({ msgType: "updateGameState", state: "started" }));
+      });
       let currentTime = new Date();
-      gameEndTime = new Date(currentTime.getDate() + (60000 * gameSettings.gameTimeMins));
-      mainTimer = setTimeout(endGame, 60000 * gameSettings.gameTimeMins);
-    }, gameSettings.preStartCooldown);
+      game.gameEnd = new Date(currentTime.getDate() + (60000 * game.settings.timeMins));
+      mainTimer = setTimeout(()=>{endGame(game)}, 60000 * game.settings.timeMins);
+    }, game.settings.preStartCooldown);
   } else {
     console.log("Game already started");
   }
 }
 
-function endGame() {
-  broadcast(JSON.stringify({ msgType: "updateGameState", state: "ended" }));
-  console.log("Game ended");
+function endGame(game) {
+  game.players.forEach(player => {
+    player.ws.send(JSON.stringify({ msgType: "updateGameState", state: "ended" }));
+  });
+  console.log(`Game ended (${game.id})`);
   game.state = "waiting";
 }
 
 function handleGameMessage(ws, message) {
-  if (message.msgType == "getGameEndTime") {
-    if (game.state == "started") {
-      // get remaining battle time
-      sendToSID(ws.id, JSON.stringify({ "msgType": "remainingTime", "time": gameEndTime }));
-    }
-  } else if (message.msgType == "setState") {
-    let index = getUIfromWSID(ws.id);
-    users[index].state = message.state;
-    if (gameSettings.startOnReady == true) {
-      if (allPlayersReady()) {
-        console.log("All players are ready.");
-        setTimeout(()=>{
-          if( allPlayersReady() && (game.state == "waiting") ) {
-            startGame();
-          }
-        }, 2000);
+  switch (message.msgType) {
+    case "getGameEndTime":
+      if (ws.game.state == "started") {
+        // get remaining battle time
+        sendToSID(ws.id, JSON.stringify({ "msgType": "remainingTime", "time": ws.game.gameEnd }));
       }
-    }
-    updateLobbyList();
-  } else if (message.msgType == "forceStartGame") {
-    startGame();
-  } else if (message.msgType == "kill") {
-    let index = users.findIndex((user) => {
-      return user.gunID == message.info.shooterID;
-    });
-    let killer = users[index].socketID;
-    sendToSID(killer, JSON.stringify({ "msgType": "kill" }));
+      break;
+    case "setState":
+      let player = ws.game.players.find(player => {return player.ws.id == ws.id});
+      if (!player) {
+        return;
+      }
+      player.state = message.state;
+      if (ws.game.settings.startOnReady == true) {
+        if (allPlayersReady(ws.game.players)) {
+          console.log("All players are ready.");
+          setTimeout(()=>{
+            if( allPlayersReady(ws.game.players) && (ws.game.state == "waiting") ) {
+              startGame(ws.game);
+            }
+          }, 2000);
+        }
+      }
+      lobbyUpdate(ws.game.players);
+      break;
+    case "forceStartGame":
+      startGame(ws.game);
+      break;
+    case "kill":
+      let killer = ws.game.players.find(player => {
+        return player.gunID == message.info.shotID;
+      });
+      killer.ws.send(killer, JSON.stringify({ "msgType": "kill" }));
+      break;
   }
 }
 
@@ -239,52 +249,48 @@ function makeUID(length) {
   return result;
 }
 
-function updateLobbyList() {
+function lobbyUpdate(players) {
+  console.log("lobby update");
   let filteredPlayerList = [];
-
-  users.forEach((user, i) => {
-    if (user.state != undefined) {
-      if (user.state == "lobby" || user.state == "ready") {
-        let ready = false;
-        if (user.state == "ready") {
-          ready = true;
-        }
-        filteredPlayerList.push({
-          username: user.username,
-          id: user.socketID,
-          ready: ready,
-        });
-      }
+  players.forEach(player => {
+    if (player.state == undefined) {
+      return;
     }
+    let ready = false;
+    if (player.state == "ready") {
+      ready = true;
+    }
+    filteredPlayerList.push({
+      username: player.username,
+      uuid: player.uuid,
+      ready: ready,
+    });
   });
-
-  broadcast(
-    JSON.stringify({
-      msgType: "lobbyListUpdated",
+  players.forEach(player => {
+    player.ws.send(JSON.stringify({
+      msgType: "lobbyUpdate",
       players: filteredPlayerList,
-    })
-  );
+    }));
+  })
 }
 
-function updatePlayerList() {
+function playerListUpdate(game) {
   let filteredPlayerList = [];
-
-  users.forEach((user, i) => {
-    if (user.state != undefined) {
-      if (user.state == "ready") {
-        filteredPlayerList.push({
-          username: user.username,
-          id: user.socketID,
-          gunID:user.gunID
-        });
-      }
+  let { players } = game;
+  players.forEach(player => {
+    if (player.state != "ready") {
+      return;
     }
+    filteredPlayerList.push({
+      username: player.username,
+      uuid: player.uuid,
+      gunID: player.gunID
+    });
   });
-
-  broadcast(
-    JSON.stringify({
-      msgType: "playerListUpdated",
+  players.forEach(player => {
+    player.ws.send(JSON.stringify({
+      msgType: "playerListUpdate",
       players: filteredPlayerList,
-    })
-  );
+    }));
+  });
 }
